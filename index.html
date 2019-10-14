@@ -1,0 +1,61 @@
+<input type="file" id="file" multiple="true" />
+<input type="button" onclick="run()" value="Upload" />
+<div id="progress"></div>
+
+<script src="https://cdn.jsdelivr.net/gh/tanaikech/ResumableUploadForGoogleDrive_js@master/resumableupload_js.min.js"></script>
+<script>
+  function run() {
+    google.script.run
+      .withSuccessHandler(accessToken =>
+        ResumableUploadForGoogleDrive(accessToken)
+      )
+      .getAuth();
+  }
+
+  function ResumableUploadForGoogleDrive(accessToken) {
+    const f = document.getElementById("file");
+    [...f.files].forEach((file, i) => {
+      let fr = new FileReader();
+      fr.fileName = file.name;
+      fr.fileSize = file.size;
+      fr.fileType = file.type;
+      fr.readAsArrayBuffer(file);
+      fr.onload = e => {
+        var id = "p" + ++i;
+        var div = document.createElement("div");
+        div.id = id;
+        document.getElementById("progress").appendChild(div);
+        document.getElementById(id).innerHTML = "Initializing.";
+        const f = e.target;
+        const resource = {
+          fileName: f.fileName,
+          fileSize: f.fileSize,
+          fileType: f.fileType,
+          fileBuffer: f.result,
+          accessToken: accessToken
+        };
+        const ru = new ResumableUploadToGoogleDrive();
+        ru.Do(resource, function(res, err) {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          console.log(res);
+          let msg = "";
+          if (res.status == "Uploading") {
+            msg =
+              Math.round(
+                (res.progressNumber.current / res.progressNumber.end) * 100
+              ) +
+              "% (" +
+              f.fileName +
+              ")";
+          } else {
+            msg = res.status + " (" + f.fileName + ")";
+          }
+          document.getElementById(id).innerText = msg;
+        });
+      };
+    });
+  }
+</script>
