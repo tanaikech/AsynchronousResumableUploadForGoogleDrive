@@ -1,6 +1,9 @@
-AsynchronousResumableUploadForGoogleDrive
-
 # Resumable Upload of Multiple Files with Asynchronous Process for Google Drive
+
+[![Build Status](https://travis-ci.org/tanaikech/AsynchronousResumableUploadForGoogleDrive.svg?branch=master)](https://travis-ci.org/tanaikech/AsynchronousResumableUploadForGoogleDrive)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENCE)
+
+<a name="top"></a>
 
 <a name="overview"></a>
 
@@ -148,7 +151,7 @@ If you have any questions and commissions for me, feel free to tell me.
 
 # Update History
 
-- v1.0.0 (October 11, 2019)
+- v1.0.0 (October 14, 2019)
 
   1. Initial release.
 
