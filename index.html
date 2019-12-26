@@ -53,6 +53,11 @@
           } else {
             msg = res.status + " (" + f.fileName + ")";
           }
+
+          // If you want to put the uploaded file information to the active Spreadsheet,
+          // please use the following function.
+          if (res.status == "Done") google.script.run.putFileInf(res.result);
+
           document.getElementById(id).innerText = msg;
         });
       };

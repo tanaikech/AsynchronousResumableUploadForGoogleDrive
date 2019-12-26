@@ -39,6 +39,8 @@ Create new Spreadsheet. And open the script editor on the created Spreadsheet.
 
 Please copy and paste the following scripts.
 
+<a name="samplescript"></a>
+
 ### Google Apps Script: Code.gs
 
 ```javascript
@@ -50,6 +52,18 @@ function main() {
 function getAuth() {
   // DriveApp.createFile(blob) // This is used for adding the scope of "https://www.googleapis.com/auth/drive".
   return ScriptApp.getOAuthToken();
+}
+
+// If you want to put the uploaded file information to the active Spreadsheet,
+// please use the following function.
+function putFileInf(obj) {
+  var lock = LockService.getDocumentLock();
+  if (lock.tryLock(5000)) {
+    SpreadsheetApp.getActiveSpreadsheet()
+      .getSheets()[0]
+      .appendRow([obj.name, obj.mimeType, obj.id]);
+    lock.releaseLock();
+  }
 }
 ```
 
@@ -111,6 +125,11 @@ function getAuth() {
           } else {
             msg = res.status + " (" + f.fileName + ")";
           }
+
+          // If you want to put the uploaded file information to the active Spreadsheet,
+          // please use the following function.
+          if (res.status == "Done") google.script.run.putFileInf(res.result);
+
           document.getElementById(id).innerText = msg;
         });
       };
@@ -154,5 +173,11 @@ If you have any questions and commissions for me, feel free to tell me.
 - v1.0.0 (October 14, 2019)
 
   1. Initial release.
+
+<a name="v101"></a>
+
+- v1.0.1 (December 27, 2019)
+
+  1. The functions for putting the information of uploaded file to the active Spreadsheet were added to [the sample script](#samplescript).
 
 [TOP](#top)
